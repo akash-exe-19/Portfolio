@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Outfit", "Segoe UI", sans-serif;
+  
+  --color-primary-900: #0a0a1a;
+  --color-primary-800: #141432;
+  --color-primary-700: #212152;
+  --color-accent-blue: #00d2ff;
+  --color-accent-purple: #7a2cb3;
+  --color-accent-neon: #ff007f;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    --background: var(--color-primary-900);
+    --foreground: #ffffff;
+  }
+  
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    font-family: var(--font-sans);
+  }
+
+  /* Custom scrollbar for webkit */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-primary-900);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-primary-700);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent-blue);
+  }
+
+  /* Hide default cursor on desktop */
+  @media (pointer: fine) {
+    body, a, button, input, textarea, select {
+      cursor: none !important;
+    }
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    background: rgba(20, 20, 50, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .text-gradient {
+    background: linear-gradient(to right, var(--color-accent-blue), var(--color-accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
