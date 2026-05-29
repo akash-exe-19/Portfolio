@@ -37,20 +37,19 @@ const CustomCursor = () => {
 
   const variants = {
     default: {
-      x: mousePosition.x - 16,
-      y: mousePosition.y - 16,
+      x: mousePosition.x - 12, // half of w-6 (24px)
+      y: mousePosition.y - 12,
       scale: 1,
-      backgroundColor: "rgba(0, 210, 255, 0.2)",
-      border: "1px solid rgba(0, 210, 255, 0.5)",
+      backgroundColor: "transparent",
+      border: "2px solid color-mix(in srgb, var(--color-accent-blue) 60%, transparent)",
       transition: { type: "tween", ease: "backOut", duration: 0.15 }
     },
     hover: {
-      x: mousePosition.x - 32,
-      y: mousePosition.y - 32,
-      scale: 1.5,
-      backgroundColor: "rgba(122, 44, 179, 0.1)",
-      border: "1px solid rgba(122, 44, 179, 0.8)",
-      mixBlendMode: "difference",
+      x: mousePosition.x - 12,
+      y: mousePosition.y - 12,
+      scale: 2.5,
+      backgroundColor: "color-mix(in srgb, var(--color-accent-blue) 15%, transparent)",
+      border: "1px solid color-mix(in srgb, var(--color-accent-blue) 80%, transparent)",
       transition: { type: "tween", ease: "backOut", duration: 0.15 }
     }
   };
@@ -58,16 +57,19 @@ const CustomCursor = () => {
   return (
     <>
       <motion.div
-        className="fixed top-0 left-0 w-8 h-8 rounded-full pointer-events-none z-[9999] hidden md:block"
+        className="fixed top-0 left-0 w-6 h-6 rounded-full pointer-events-none z-[9999] hidden md:block"
         variants={variants}
         animate={isHovering ? "hover" : "default"}
       />
       {/* Tiny inner dot */}
       <motion.div
-        className="fixed top-0 left-0 w-2 h-2 rounded-full bg-white pointer-events-none z-[10000] hidden md:block"
+        className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-[10000] hidden md:block"
+        style={{ backgroundColor: "var(--color-accent-blue)" }}
         animate={{
           x: mousePosition.x - 4,
           y: mousePosition.y - 4,
+          opacity: isHovering ? 0 : 1,
+          scale: isHovering ? 0 : 1,
         }}
         transition={{ type: "tween", ease: "linear", duration: 0 }}
       />

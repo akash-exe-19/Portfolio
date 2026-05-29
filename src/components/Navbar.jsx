@@ -26,7 +26,7 @@ const Navbar = () => {
   useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: "-20% 0px -60% 0px",
+      rootMargin: "-50% 0px -50% 0px",
       threshold: 0,
     };
 
@@ -59,21 +59,11 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed w-full z-50 transition-all duration-300 ${
-        scrolled ? "bg-primary-900/80 backdrop-blur-md border-b border-white/5 py-4" : "bg-transparent py-6"
-      }`}
+      className="fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 rounded-full glass-panel bg-primary-900/60 backdrop-blur-md border border-white/10 px-6 md:px-12 py-3 md:py-4 shadow-2xl hover:shadow-[0_0_40px_-10px_color-mix(in_srgb,var(--color-accent-blue)_40%,transparent)] w-[90%] md:w-[600px] flex justify-center"
     >
-      <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
-        <a 
-          href="#home" 
-          onClick={(e) => handleLinkClick(e, "home")}
-          className="text-2xl font-bold tracking-tighter text-white cursor-pointer"
-        >
-          AKASH<span className="text-accent-blue">.</span>
-        </a>
-
+      <div className="flex justify-center items-center w-full">
         {/* Desktop Nav */}
-        <div className="hidden md:flex gap-8">
+        <div className="hidden md:flex justify-center w-full gap-10">
           {navLinks.map((link) => {
             const isActive = activeSection === link.path;
             return (
@@ -81,8 +71,7 @@ const Navbar = () => {
                 key={link.name}
                 href={`#${link.path}`}
                 onClick={(e) => handleLinkClick(e, link.path)}
-                className="relative text-sm font-medium transition-colors hover:text-white cursor-pointer"
-                style={{ color: isActive ? "#fff" : "rgba(255,255,255,0.6)" }}
+                className={`relative text-sm font-medium transition-colors cursor-pointer ${isActive ? 'text-white' : 'text-white/60 hover:text-white'}`}
               >
                 {link.name}
                 {isActive && (
@@ -109,9 +98,9 @@ const Navbar = () => {
       {/* Mobile Nav Menu */}
       {isOpen && (
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="absolute top-full left-0 w-full bg-primary-800 border-b border-white/10 md:hidden flex flex-col py-4"
+          initial={{ opacity: 0, y: -20, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          className="absolute top-[120%] left-0 w-full bg-primary-900/90 backdrop-blur-lg border border-white/10 rounded-2xl md:hidden flex flex-col py-4 shadow-2xl overflow-hidden"
         >
           {navLinks.map((link) => (
             <a

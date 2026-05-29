@@ -1,5 +1,6 @@
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { ChevronUp, ChevronDown } from "lucide-react";
 import AnimatedLayout from "../components/AnimatedLayout";
 import { timelineData } from "../data/timelineData";
 
@@ -7,11 +8,11 @@ const TimelineItem = ({ item, index, totalItems, scrollYProgress }) => {
   const rangeStart = index / totalItems;
   const rangeEnd = (index + 1) / totalItems;
   
-  // Ensure the array is strictly non-decreasing and bounded
-  const p1 = Math.max(0, rangeStart - 0.05);
-  const p2 = Math.max(p1 + 0.01, rangeStart);
-  const p3 = Math.max(p2 + 0.01, rangeEnd - 0.05);
-  const p4 = Math.max(p3 + 0.01, rangeEnd);
+  // Tight margins for a clean visual "snap" effect
+  const p1 = Math.max(0, rangeStart - 0.02);
+  const p2 = rangeStart + 0.05;
+  const p3 = rangeEnd - 0.05;
+  const p4 = Math.min(1, rangeEnd + 0.02);
   
   const opacity = useTransform(
     scrollYProgress,
@@ -22,13 +23,13 @@ const TimelineItem = ({ item, index, totalItems, scrollYProgress }) => {
   const y = useTransform(
     scrollYProgress,
     [p1, p2, p3, p4],
-    [50, 0, 0, -50]
+    [30, 0, 0, -30]
   );
   
   const scale = useTransform(
     scrollYProgress,
     [p1, p2, p3, p4],
-    [0.9, 1, 1, 0.9]
+    [0.95, 1, 1, 0.95]
   );
 
   return (
@@ -36,7 +37,7 @@ const TimelineItem = ({ item, index, totalItems, scrollYProgress }) => {
       style={{ opacity, y, scale }}
       className="absolute inset-0 flex flex-col justify-center pointer-events-none"
     >
-      <div className="pointer-events-auto">
+      <div className="pointer-events-auto w-[85%] md:w-2/3 pl-8 md:pl-16">
         <span className="text-accent-blue text-2xl font-bold tracking-widest mb-4 block">
           {item.year}
         </span>
@@ -75,46 +76,78 @@ const TimelineItem = ({ item, index, totalItems, scrollYProgress }) => {
 
 const Journey = ({ id = "journey" }) => {
   const containerRef = useRef(null);
+  
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
   });
 
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 70,
+    damping: 20,
+    restDelta: 0.001
+  });
+
+  const scrollToTop = () => {
+    if (containerRef.current) {
+      const top = containerRef.current.offsetTop;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+  };
+
+  const scrollToBottom = () => {
+    if (containerRef.current) {
+      const bottom = containerRef.current.offsetTop + containerRef.current.offsetHeight - window.innerHeight;
+      window.scrollTo({ top: bottom, behavior: "smooth" });
+    }
+  };
+
   return (
     <AnimatedLayout id={id} className="!pt-0 !pb-0 !px-0">
-      <div ref={containerRef} className="h-[300vh] relative bg-transparent">
-        <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-          {/* Wheel Background Element */}
-          <motion.div 
-            className="absolute left-[-20vw] top-1/2 -translate-y-1/2 w-[80vh] h-[80vh] rounded-full border-[1px] border-white/5 opacity-50"
-            style={{ rotate: useTransform(scrollYProgress, [0, 1], [0, 360]) }}
-          >
-            {timelineData.map((item, i) => {
-              const angle = (i / timelineData.length) * 360;
-              return (
-                <div 
-                  key={item.id} 
-                  className="absolute w-4 h-4 bg-accent-blue rounded-full"
-                  style={{
-                    top: '50%',
-                    left: '50%',
-                    transform: `translate(-50%, -50%) rotate(${angle}deg) translateX(40vh)`
-                  }}
-                />
-              )
-            })}
-          </motion.div>
+      <div 
+        ref={containerRef} 
+        className="h-[700vh] w-full relative bg-transparent"
+      >
+        <div className="sticky top-0 left-0 w-full h-[100vh]">
+          {/* Vertical Timeline Track */}
+          <div className="absolute left-6 md:left-[20%] top-[10vh] bottom-[10vh] w-1 bg-white/10 rounded-full overflow-hidden shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+            <motion.div 
+              className="absolute top-0 left-0 w-full bg-accent-blue shadow-[0_0_20px_var(--color-accent-blue)]"
+              style={{ 
+                height: "100%",
+                scaleY: smoothProgress,
+                transformOrigin: "top"
+              }}
+            />
+          </div>
 
-          <div className="w-full max-w-7xl mx-auto px-6 md:px-12 relative z-10 flex flex-col md:flex-row justify-end items-center">
-            
-            <div className="w-full md:w-1/2 relative h-[60vh]">
+          {/* Navigation Arrows */}
+          <div className="absolute left-10 md:left-[24%] top-1/2 -translate-y-1/2 flex flex-col gap-4 z-20">
+            <button 
+              onClick={scrollToTop}
+              className="p-3 rounded-full glass-panel bg-primary-900/60 backdrop-blur-md border border-white/10 shadow-xl text-white/60 hover:text-white hover:shadow-[0_0_30px_-5px_color-mix(in_srgb,var(--color-accent-blue)_40%,transparent)] transition-all cursor-pointer"
+              title="Jump to Start"
+            >
+              <ChevronUp size={24} />
+            </button>
+            <button 
+              onClick={scrollToBottom}
+              className="p-3 rounded-full glass-panel bg-primary-900/60 backdrop-blur-md border border-white/10 shadow-xl text-white/60 hover:text-white hover:shadow-[0_0_30px_-5px_color-mix(in_srgb,var(--color-accent-blue)_40%,transparent)] transition-all cursor-pointer"
+              title="Jump to End"
+            >
+              <ChevronDown size={24} />
+            </button>
+          </div>
+
+          <div className="w-full max-w-7xl mx-auto px-6 md:px-12 relative z-10 flex justify-end items-center h-full">
+            <div className="w-[85%] md:w-2/3 relative h-[80vh]">
               {timelineData.map((item, index) => (
                 <TimelineItem 
                   key={item.id} 
                   item={item} 
                   index={index} 
                   totalItems={timelineData.length} 
-                  scrollYProgress={scrollYProgress} 
+                  scrollYProgress={smoothProgress} 
                 />
               ))}
             </div>

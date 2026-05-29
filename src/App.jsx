@@ -1,4 +1,7 @@
 import Navbar from "./components/Navbar";
+import MusicPlayer from "./components/MusicPlayer";
+import Socials from "./components/Socials";
+import ThemeEditor from "./components/ThemeEditor";
 import CustomCursor from "./components/CustomCursor";
 import Particles from "./components/Particles";
 import Hero from "./pages/Hero";
@@ -18,6 +21,9 @@ function App() {
       </div>
 
       <Navbar />
+      <MusicPlayer />
+      <Socials />
+      <ThemeEditor />
       <main className="relative z-10">
         <Hero id="home" />
         <Journey id="journey" />

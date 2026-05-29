@@ -32,12 +32,24 @@ const Particles = () => {
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseout", handleMouseOut);
 
+    // Track theme color changes dynamically
+    let currentThemeColor = getComputedStyle(document.documentElement).getPropertyValue('--color-accent-blue').trim() || "#00d2ff";
+
+    const observer = new MutationObserver(() => {
+      const newColor = getComputedStyle(document.documentElement).getPropertyValue('--color-accent-blue').trim();
+      if (newColor && newColor !== currentThemeColor) {
+        currentThemeColor = newColor;
+      }
+    });
+    
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] });
+
     class Particle {
-      constructor(x, y, size, color, weight) {
+      constructor(x, y, size, opacity, weight) {
         this.x = x;
         this.y = y;
         this.size = size;
-        this.color = color;
+        this.opacity = opacity;
         this.weight = weight;
         this.baseX = this.x;
         this.baseY = this.y;
@@ -48,8 +60,10 @@ const Particles = () => {
       draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-        ctx.fillStyle = this.color;
+        ctx.globalAlpha = this.opacity;
+        ctx.fillStyle = currentThemeColor;
         ctx.fill();
+        ctx.globalAlpha = 1.0; // Reset alpha for other draws if needed
         ctx.closePath();
       }
 
@@ -98,12 +112,12 @@ const Particles = () => {
       particles = [];
       const numberOfParticles = (canvas.width * canvas.height) / 9000;
       for (let i = 0; i < numberOfParticles; i++) {
-        let size = (Math.random() * 2) + 1;
+        let size = (Math.random() * 4) + 2;
         let x = Math.random() * innerWidth;
         let y = Math.random() * innerHeight;
-        let color = `rgba(0, 210, 255, ${Math.random() * 0.5 + 0.1})`; // Accent blue with random opacity
+        let opacity = Math.random() * 0.5 + 0.1; 
         let weight = Math.random() * 2 + 1;
-        particles.push(new Particle(x, y, size, color, weight));
+        particles.push(new Particle(x, y, size, opacity, weight));
       }
     };
 
