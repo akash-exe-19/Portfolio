@@ -111,7 +111,7 @@ const Showcase = ({ id = "showcase" }) => {
 
             {/* Single Active Item Container */}
             <div 
-              className="w-full max-w-5xl aspect-video md:aspect-[21/9] relative cursor-pointer flex justify-center items-center" 
+              className="w-full max-w-5xl aspect-video md:aspect-[21/9] relative cursor-pointer flex justify-center items-center overflow-hidden rounded-2xl" 
               onClick={() => setIsLightboxOpen(true)}
             >
               <AnimatePresence initial={false} custom={direction}>
