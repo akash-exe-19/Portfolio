@@ -22,6 +22,7 @@ const Socials = () => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <button
+        onClick={() => setIsHovered(!isHovered)}
         className="flex items-center justify-center text-white/60 group-hover:text-white transition-colors cursor-pointer relative z-10"
         aria-label="Socials Menu"
       >

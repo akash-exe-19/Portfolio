@@ -95,7 +95,7 @@ const MusicPlayer = () => {
             animate={{ height: 100, opacity: 1, marginTop: 12 }}
             exit={{ height: 0, opacity: 0, marginTop: 0 }}
             transition={{ duration: 0.3 }}
-            className="flex flex-col items-center overflow-hidden w-full"
+            className="hidden md:flex flex-col items-center overflow-hidden w-full"
           >
             <input 
               type="range" 

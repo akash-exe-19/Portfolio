@@ -122,7 +122,7 @@ const Journey = ({ id = "journey" }) => {
           </div>
 
           {/* Navigation Arrows */}
-          <div className="absolute left-10 md:left-[24%] top-1/2 -translate-y-1/2 flex flex-col gap-4 z-20">
+          <div className="absolute right-4 md:right-auto md:left-[24%] top-1/2 -translate-y-1/2 flex flex-col gap-4 z-20">
             <button 
               onClick={scrollToTop}
               className="p-3 rounded-full glass-panel bg-primary-900/60 backdrop-blur-md border border-white/10 shadow-xl text-white/60 hover:text-white hover:shadow-[0_0_30px_-5px_color-mix(in_srgb,var(--color-accent-blue)_40%,transparent)] transition-all cursor-pointer"
