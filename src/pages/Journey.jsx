@@ -106,11 +106,11 @@ const Journey = ({ id = "journey" }) => {
     <AnimatedLayout id={id} className="!pt-0 !pb-0 !px-0">
       <div 
         ref={containerRef} 
-        className="h-[700vh] w-full relative bg-transparent"
+        className="h-[700dvh] w-full relative bg-transparent"
       >
-        <div className="sticky top-0 left-0 w-full h-[100vh]">
+        <div className="sticky top-0 left-0 w-full h-[100dvh]">
           {/* Vertical Timeline Track */}
-          <div className="absolute left-6 md:left-[20%] top-[10vh] bottom-[10vh] w-1 bg-white/10 rounded-full overflow-hidden shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+          <div className="absolute left-6 md:left-[20%] top-[10dvh] bottom-[10dvh] w-1 bg-white/10 rounded-full overflow-hidden shadow-[0_0_15px_rgba(255,255,255,0.05)]">
             <motion.div 
               className="absolute top-0 left-0 w-full bg-accent-blue shadow-[0_0_20px_var(--color-accent-blue)]"
               style={{ 
@@ -140,7 +140,7 @@ const Journey = ({ id = "journey" }) => {
           </div>
 
           <div className="w-full max-w-7xl mx-auto px-6 md:px-12 relative z-10 flex justify-end items-center h-full">
-            <div className="w-[85%] md:w-2/3 relative h-[80vh]">
+            <div className="w-[85%] md:w-2/3 relative h-[80dvh]">
               {timelineData.map((item, index) => (
                 <TimelineItem 
                   key={item.id} 

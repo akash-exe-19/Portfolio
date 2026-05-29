@@ -13,12 +13,11 @@ const Particles = () => {
 
     let lastWidth = window.innerWidth;
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      
       // Only reinitialize particles if it's the first load or orientation changes (width change).
       // This prevents visual glitches on mobile when the address bar hides/shows on scroll.
       if (particles.length === 0 || Math.abs(window.innerWidth - lastWidth) > 50) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
         initParticles();
         lastWidth = window.innerWidth;
       }
