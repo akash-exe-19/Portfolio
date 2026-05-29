@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
@@ -59,7 +59,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className="fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 rounded-full glass-panel bg-primary-900/60 backdrop-blur-md border border-white/10 px-6 md:px-12 py-3 md:py-4 shadow-2xl hover:shadow-[0_0_40px_-10px_color-mix(in_srgb,var(--color-accent-blue)_40%,transparent)] w-[calc(100%-8rem)] md:w-[600px] flex justify-center"
+      className="fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 rounded-full glass-panel bg-primary-900/60 backdrop-blur-md border border-white/10 px-6 md:px-12 py-3 md:py-4 shadow-2xl hover:shadow-[0_0_40px_-10px_color-mix(in_srgb,var(--color-accent-blue)_40%,transparent)] w-auto md:w-[600px] flex justify-center"
     >
       <div className="flex justify-center items-center w-full">
         {/* Desktop Nav */}
@@ -88,7 +88,7 @@ const Navbar = () => {
 
         {/* Mobile Nav Toggle */}
         <button
-          className="md:hidden text-white focus:outline-none cursor-pointer"
+          className="md:hidden text-white focus:outline-none cursor-pointer flex items-center justify-center"
           onClick={() => setIsOpen(!isOpen)}
         >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -96,12 +96,14 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Nav Menu */}
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0, y: -20, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          className="absolute top-[120%] left-0 w-full bg-primary-900/90 backdrop-blur-lg border border-white/10 rounded-2xl md:hidden flex flex-col py-4 shadow-2xl overflow-hidden"
-        >
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            className="absolute top-[120%] left-1/2 -translate-x-1/2 w-[80vw] sm:w-[300px] bg-primary-900/90 backdrop-blur-lg border border-white/10 rounded-2xl md:hidden flex flex-col py-4 shadow-2xl overflow-hidden"
+          >
           {navLinks.map((link) => (
             <a
               key={link.name}
@@ -115,7 +117,8 @@ const Navbar = () => {
             </a>
           ))}
         </motion.div>
-      )}
+        )}
+      </AnimatePresence>
     </nav>
   );
 };
