@@ -12,7 +12,7 @@ import Contact from "./pages/Contact";
 
 function App() {
   return (
-    <div className="bg-primary-900 min-h-screen text-white font-sans selection:bg-accent-blue/30 selection:text-white relative">
+    <div className="bg-primary-900 min-h-screen text-white font-sans selection:bg-accent-blue/30 selection:text-white relative overflow-x-hidden">
       <CustomCursor />
       
       {/* Global Particle Background */}

@@ -48,7 +48,7 @@ const Showcase = ({ id = "showcase" }) => {
 
   const slideVariants = {
     enter: (direction) => ({
-      x: direction > 0 ? 1000 : -1000,
+      x: direction > 0 ? "100%" : "-100%",
       opacity: 0,
       scale: 0.95
     }),
@@ -60,7 +60,7 @@ const Showcase = ({ id = "showcase" }) => {
     },
     exit: (direction) => ({
       zIndex: 0,
-      x: direction < 0 ? 1000 : -1000,
+      x: direction < 0 ? "100%" : "-100%",
       opacity: 0,
       scale: 0.95
     })
