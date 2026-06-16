@@ -3,6 +3,9 @@ import banner2 from '../assets/Banners/Naruto 1.png';
 import poster1 from '../assets/Posters/De Tomaso.png';
 import poster2 from '../assets/Posters/Gojo Saturo.png';
 import poster3 from '../assets/Posters/porsche.png';
+import poster4 from '../assets/Posters/Bruno4.png';
+import poster5 from '../assets/Posters/France2.png';
+import poster6 from '../assets/Posters/Haaland.png';
 
 export const graphicsData = [
   {
@@ -56,13 +59,34 @@ export const graphicsData = [
   },
   {
     id: 8,
+    title: "Bruno Fernandes Poster",
+    category: "Posters",
+    image: poster4,
+    themeColor: "#da291c" // MUFC Red
+  },
+  {
+    id: 9,
+    title: "France Team Poster",
+    category: "Posters",
+    image: poster5,
+    themeColor: "#002395" // French Blue
+  },
+  {
+    id: 10,
+    title: "Erling Haaland Poster",
+    category: "Posters",
+    image: poster6,
+    themeColor: "#6cabdd" // Man City Blue
+  },
+  {
+    id: 11,
     title: "Startup Brand Identity",
     category: "Logos",
     image: "https://picsum.photos/seed/logo2/800/600",
     themeColor: "#00fa9a" // Medium spring green
   },
   {
-    id: 9,
+    id: 12,
     title: "Sci-Fi Render",
     category: "3D Art",
     image: "https://picsum.photos/seed/3d2/800/600",
