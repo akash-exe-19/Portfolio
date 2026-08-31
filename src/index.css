@@ -1,68 +1,49 @@
 @import "tailwindcss";
 
 :root {
-  /* Default Dark Theme Variables */
-  --bg-primary-900: #0a0a1a;
-  --bg-primary-800: #141432;
-  --bg-primary-700: #212152;
-  --color-white-override: #ffffff;
-  --glass-bg: rgba(20, 20, 50, 0.4);
-  --glass-border: rgba(255, 255, 255, 0.05);
   color-scheme: dark;
-}
-
-:root.light-theme {
-  /* Light Theme Variables */
-  --bg-primary-900: #f8fafc;
-  --bg-primary-800: #f1f5f9;
-  --bg-primary-700: #e2e8f0;
-  --color-white-override: #0f172a; /* Slate 900 for text/foreground */
-  --glass-bg: rgba(255, 255, 255, 0.6);
-  --glass-border: rgba(0, 0, 0, 0.1);
-  color-scheme: light;
+  --bg-primary-900: #000000;
+  --bg-primary-800: #0a0a0a;
+  --bg-primary-700: #111111;
+  --color-white-override: #ffffff;
+  --color-accent-blue: #ef4444;
+  --glass-bg: rgba(10, 10, 10, 0.95);
+  --glass-border: rgba(255, 255, 255, 0.12);
 }
 
 @theme {
-  --font-sans: "Inter", "Outfit", "Segoe UI", sans-serif;
-  
+  --font-sans: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
   --color-primary-900: var(--bg-primary-900);
   --color-primary-800: var(--bg-primary-800);
   --color-primary-700: var(--bg-primary-700);
   --color-accent-blue: #ef4444;
   --color-accent-purple: #7a2cb3;
   --color-accent-neon: #ff007f;
-  
-  /* Map Tailwind's "white" to our dynamic foreground color */
   --color-white: var(--color-white-override);
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   body {
-    background-color: var(--bg-primary-900);
-    color: var(--color-white-override);
+    background-color: #000000;
+    color: #ffffff;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    font-family: var(--font-sans);
-    transition: background-color 0.5s ease, color 0.5s ease;
+    font-family: "Space Grotesk", sans-serif;
+    transition: background-color 0.3s ease;
   }
 
-  /* Custom scrollbar for webkit */
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-  ::-webkit-scrollbar-track {
-    background: var(--bg-primary-900);
-  }
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: #000; }
   ::-webkit-scrollbar-thumb {
-    background: var(--bg-primary-700);
-    border-radius: 4px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
     background: var(--color-accent-blue);
+    border-radius: 0;
   }
 
-  /* Hide default cursor on desktop */
   @media (pointer: fine) {
     body, a, button, input, textarea, select {
       cursor: none !important;
@@ -72,17 +53,39 @@
 
 @layer utilities {
   .glass-panel {
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
-    transition: background-color 0.5s ease, border-color 0.5s ease;
+    background: #0a0a0a;
+    border: 1px solid rgba(255, 255, 255, 0.12);
   }
-  
+
+  .stark-panel {
+    background: #0a0a0a;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
   .text-gradient {
-    background: linear-gradient(to right, var(--color-accent-blue), var(--color-accent-purple));
+    background: linear-gradient(90deg, var(--color-accent-blue), #ffffff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+
+  .display-text {
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 0.9;
+  }
+
+  .terminal-text {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  .text-accent-blue { color: var(--color-accent-blue) !important; }
+  .border-accent-blue { border-color: var(--color-accent-blue) !important; }
+  .bg-accent-blue { background-color: var(--color-accent-blue) !important; }
+  .shadow-accent { box-shadow: 0 0 30px color-mix(in srgb, var(--color-accent-blue) 30%, transparent); }
 }
+
+

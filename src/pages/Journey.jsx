@@ -8,52 +8,47 @@ const TimelineItem = ({ item, index, totalItems, scrollYProgress }) => {
   const rangeStart = index / totalItems;
   const rangeEnd = (index + 1) / totalItems;
   
-  // Tight margins for a clean visual "snap" effect
-  const p1 = Math.max(0, rangeStart - 0.02);
-  const p2 = rangeStart + 0.05;
+  const isFirst = index === 0;
+  const p1 = isFirst ? 0 : Math.max(0, rangeStart - 0.02);
+  const p2 = isFirst ? 0 : rangeStart + 0.05;
   const p3 = rangeEnd - 0.05;
   const p4 = Math.min(1, rangeEnd + 0.02);
   
-  const opacity = useTransform(
-    scrollYProgress,
-    [p1, p2, p3, p4],
-    [0, 1, 1, 0]
-  );
-  
-  const y = useTransform(
-    scrollYProgress,
-    [p1, p2, p3, p4],
-    [30, 0, 0, -30]
-  );
-  
-  const scale = useTransform(
-    scrollYProgress,
-    [p1, p2, p3, p4],
-    [0.95, 1, 1, 0.95]
-  );
+  const opacity = useTransform(scrollYProgress, [p1, p2, p3, p4], isFirst ? [1, 1, 1, 0] : [0, 1, 1, 0]);
+  const y = useTransform(scrollYProgress, [p1, p2, p3, p4], isFirst ? [0, 0, 0, -30] : [30, 0, 0, -30]);
+  const scale = useTransform(scrollYProgress, [p1, p2, p3, p4], isFirst ? [1, 1, 1, 0.98] : [0.98, 1, 1, 0.98]);
 
   return (
     <motion.div
       style={{ opacity, y, scale }}
       className="absolute inset-0 flex flex-col justify-center pointer-events-none"
     >
-      <div className="pointer-events-auto w-[85%] md:w-2/3 pl-8 md:pl-16">
-        <span className="text-accent-blue text-2xl font-bold tracking-widest mb-4 block">
+      <div className="pointer-events-auto w-[90%] md:w-2/3 pl-8 md:pl-16 relative">
+        {/* Giant background year */}
+        <div
+          className="absolute -top-8 -left-2 text-[8rem] md:text-[12rem] font-bold leading-none select-none pointer-events-none"
+          style={{ color: "rgba(255,255,255,0.03)", fontFamily: "'Space Grotesk', sans-serif" }}
+        >
+          {item.year}
+        </div>
+
+        {/* Content */}
+        <span className="font-mono text-xs tracking-[0.3em] uppercase mb-3 block" style={{ color: "var(--color-accent-blue)" }}>
           {item.year}
         </span>
-        <h2 className="text-4xl md:text-5xl font-black mb-6 text-white">
+        <h2 className="text-3xl md:text-5xl font-bold mb-4 text-white tracking-tight leading-tight">
           {item.title}
         </h2>
-        <p className="text-lg text-white/70 mb-8 max-w-lg leading-relaxed">
+        <p className="text-sm md:text-base text-white/50 mb-8 max-w-lg leading-relaxed font-mono">
           {item.description}
         </p>
         
         <div className="flex flex-col gap-6">
           <div>
-            <h4 className="text-sm uppercase tracking-wider text-white/50 mb-3">Core Skills</h4>
+            <h4 className="font-mono text-[10px] uppercase tracking-widest text-white/30 mb-3">Skills</h4>
             <div className="flex flex-wrap gap-2">
               {item.skills.map(skill => (
-                <span key={skill} className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-sm">
+                <span key={skill} className="px-3 py-1 border border-white/10 text-xs font-mono text-white/60 hover:border-white/30 transition-colors">
                   {skill}
                 </span>
               ))}
@@ -61,10 +56,13 @@ const TimelineItem = ({ item, index, totalItems, scrollYProgress }) => {
           </div>
           
           <div>
-            <h4 className="text-sm uppercase tracking-wider text-white/50 mb-3">Milestones</h4>
-            <ul className="list-disc list-inside text-white/80 space-y-1 text-sm">
+            <h4 className="font-mono text-[10px] uppercase tracking-widest text-white/30 mb-3">Milestones</h4>
+            <ul className="space-y-1">
               {item.milestones.map(milestone => (
-                <li key={milestone}>{milestone}</li>
+                <li key={milestone} className="font-mono text-xs text-white/50 flex items-start gap-2">
+                  <span style={{ color: "var(--color-accent-blue)" }}>›</span>
+                  {milestone}
+                </li>
               ))}
             </ul>
           </div>
@@ -109,6 +107,7 @@ const Journey = ({ id = "journey" }) => {
         className="h-[700dvh] w-full relative bg-transparent"
       >
         <div className="sticky top-0 left-0 w-full h-[100dvh]">
+
           {/* Vertical Timeline Track */}
           <div className="absolute left-6 md:left-[20%] top-[10dvh] bottom-[10dvh] w-1 bg-white/10 rounded-full overflow-hidden shadow-[0_0_15px_rgba(255,255,255,0.05)]">
             <motion.div 

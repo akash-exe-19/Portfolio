@@ -1,49 +1,79 @@
 import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Terminal } from "lucide-react";
 
 const ProjectCard = ({ project }) => {
   return (
     <motion.div
-      whileHover={{ y: -10 }}
-      className="group relative rounded-2xl overflow-hidden glass-panel flex flex-col h-full"
+      whileHover={{ y: -6, scale: 1.01 }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
+      className="group relative border border-white/15 bg-black flex flex-col h-full overflow-hidden"
     >
-      <div className="relative h-48 w-full overflow-hidden">
+      {/* Terminal Header Bar */}
+      <div className="bg-white/5 border-b border-white/10 px-4 py-2.5 flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-2">
+          <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
+          <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
+          <div className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
+          <span className="font-mono text-[11px] text-white/40 ml-2 tracking-wider">
+            proj_{String(project.id).padStart(2, '0')}.manifest
+          </span>
+        </div>
+        <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-emerald-400">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span>DEPLOYED</span>
+        </div>
+      </div>
+
+      {/* Project Image Box */}
+      <div className="relative h-48 w-full overflow-hidden bg-white/5 border-b border-white/10">
         <img
           src={project.image}
           alt={project.title}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-primary-900 to-transparent opacity-80" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
       </div>
       
-      <div className="flex-1 p-6 flex flex-col">
-        <h3 className="text-xl font-bold mb-2 group-hover:text-accent-blue transition-colors">
-          {project.title}
-        </h3>
-        <p className="text-sm text-white/70 mb-6 flex-1">
-          {project.description}
-        </p>
-        
-        <div className="flex flex-wrap gap-2 mb-6">
-          {project.tech.map((tag) => (
-            <span
-              key={tag}
-              className="text-xs px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white/90"
-            >
-              {tag}
-            </span>
-          ))}
+      {/* Card Content */}
+      <div className="flex-1 p-6 flex flex-col justify-between">
+        <div>
+          <h3 className="text-xl font-bold mb-3 text-white group-hover:text-accent-blue transition-colors tracking-tight flex items-center gap-2">
+            <Terminal size={16} className="text-accent-blue shrink-0" />
+            {project.title}
+          </h3>
+          <p className="font-mono text-xs text-white/50 mb-6 leading-relaxed">
+            {project.description}
+          </p>
         </div>
-        
-        <a
-          href={project.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center text-sm font-medium text-accent-blue hover:text-accent-neon transition-colors"
-        >
-          View Project <ExternalLink size={16} className="ml-2" />
-        </a>
+
+        <div>
+          {/* CLI Style Tech Flags */}
+          <div className="mb-6">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-white/30 mb-2">--stack</p>
+            <div className="flex flex-wrap gap-1.5">
+              {project.tech.map((tag) => (
+                <span
+                  key={tag}
+                  className="font-mono text-[11px] px-2.5 py-1 border border-white/10 bg-white/5 text-white/70"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+          
+          {/* Action Link */}
+          <a
+            href={project.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 font-mono text-xs tracking-widest uppercase border border-white/20 px-4 py-2.5 text-white hover:border-accent-blue hover:text-accent-blue transition-all w-full justify-center"
+          >
+            <span>[ VIEW PROJECT ]</span>
+            <ExternalLink size={14} />
+          </a>
+        </div>
       </div>
     </motion.div>
   );

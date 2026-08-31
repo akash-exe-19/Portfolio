@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Volume2, VolumeX } from "lucide-react";
+import { Volume2, VolumeX, BellRing, BellOff } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { sfx } from "../utils/sfx";
 
 const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [volume, setVolume] = useState(0.5);
+  const [isSfxMuted, setIsSfxMuted] = useState(false);
   const audioRef = useRef(null);
   const containerRef = useRef(null);
 
@@ -14,11 +16,10 @@ const MusicPlayer = () => {
     audioRef.current.loop = true;
     audioRef.current.volume = volume;
 
-    // Attempt autoplay
     audioRef.current.play().then(() => {
       setIsPlaying(true);
     }).catch((error) => {
-      console.warn("Autoplay prevented by browser. User must interact first.", error);
+      console.warn("Autoplay prevented by browser.", error);
       setIsPlaying(false);
     });
 
@@ -31,12 +32,19 @@ const MusicPlayer = () => {
   }, []);
 
   const togglePlay = () => {
+    sfx.playClick();
     if (isPlaying) {
       audioRef.current.pause();
     } else {
       audioRef.current.play().catch(error => console.error("Audio playback failed:", error));
     }
     setIsPlaying(!isPlaying);
+  };
+
+  const toggleSfxMute = () => {
+    const muted = sfx.toggleMute();
+    setIsSfxMuted(muted);
+    if (!muted) sfx.playCommand();
   };
 
   const handleVolumeChange = (e) => {
@@ -66,11 +74,14 @@ const MusicPlayer = () => {
   return (
     <motion.div
       ref={containerRef}
-      initial={{ opacity: 0, y: -20 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
-      className="fixed top-6 right-6 z-50 flex flex-col items-center justify-start p-3 rounded-full glass-panel bg-primary-900/60 backdrop-blur-md border border-white/10 shadow-xl group hover:shadow-[0_0_30px_-5px_color-mix(in_srgb,var(--color-accent-blue)_40%,transparent)] transition-shadow duration-500"
-      onMouseEnter={() => setIsHovered(true)}
+      className="fixed bottom-20 left-6 z-50 flex flex-col items-center justify-start p-3 rounded-full glass-panel bg-primary-900/60 backdrop-blur-md border border-white/10 shadow-xl group hover:shadow-[0_0_30px_-5px_color-mix(in_srgb,var(--color-accent-blue)_40%,transparent)] transition-shadow duration-500"
+      onMouseEnter={() => {
+        sfx.playHover();
+        setIsHovered(true);
+      }}
       onMouseLeave={() => setIsHovered(false)}
     >
       <button
@@ -78,7 +89,6 @@ const MusicPlayer = () => {
         className="flex items-center justify-center text-white transition-all cursor-pointer relative"
         aria-label="Toggle Music"
       >
-        {/* Glow effect on hover */}
         <div className="absolute inset-0 rounded-full blur-md bg-accent-blue/0 group-hover:bg-accent-blue/40 transition-colors duration-300 pointer-events-none scale-150" />
         
         {isPlaying ? (
@@ -92,10 +102,10 @@ const MusicPlayer = () => {
         {isHovered && (
           <motion.div
             initial={{ height: 0, opacity: 0, marginTop: 0 }}
-            animate={{ height: 100, opacity: 1, marginTop: 12 }}
+            animate={{ height: 130, opacity: 1, marginTop: 12 }}
             exit={{ height: 0, opacity: 0, marginTop: 0 }}
             transition={{ duration: 0.3 }}
-            className="hidden md:flex flex-col items-center overflow-hidden w-full"
+            className="hidden md:flex flex-col items-center justify-between overflow-hidden w-full gap-2 py-1"
           >
             <input 
               type="range" 
@@ -104,10 +114,17 @@ const MusicPlayer = () => {
               step="0.01" 
               value={volume}
               onChange={handleVolumeChange}
-              className="w-1.5 h-[90%] bg-white/20 rounded-lg appearance-none cursor-ns-resize accent-accent-blue"
+              className="w-1.5 h-16 bg-white/20 rounded-lg appearance-none cursor-ns-resize accent-accent-blue"
               style={{ WebkitAppearance: 'slider-vertical', writingMode: 'bt-lr' }}
               aria-label="Volume Control"
             />
+            <button
+              onClick={toggleSfxMute}
+              className="p-1 text-white/50 hover:text-white transition-colors cursor-pointer"
+              title={isSfxMuted ? "Enable UI Sound Effects" : "Mute UI Sound Effects"}
+            >
+              {isSfxMuted ? <BellOff size={14} className="text-red-400" /> : <BellRing size={14} className="text-accent-blue" />}
+            </button>
           </motion.div>
         )}
       </AnimatePresence>

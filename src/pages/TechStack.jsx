@@ -1,42 +1,22 @@
 import { motion } from "framer-motion";
 import AnimatedLayout from "../components/AnimatedLayout";
 
-const skills = [
-  {
-    category: "Languages & Core",
-    items: [
-      { name: "Python", level: 80 },
-      { name: "C/C++", level: 70 },
-      { name: "Java", level: 70 },
-      { name: "TypeScript", level: 50 },
-    ]
-  },
-  {
-    category: "Frontend & UI",
-    items: [
-      { name: "HTML", level: 90 },
-      { name: "CSS", level: 90 },
-      { name: "React", level: 80 },
-    ]
-  },
-  {
-    category: "Backend & Systems",
-    items: [
-      { name: "FastAPI", level: 70 },
-      { name: "Python/C/C++", level: 80 },
-      { name: "Firebase", level: 75 },
-      { name: "MongoDB", level: 85 },
-    ]
-  },
-  {
-    category: "Creative & Design",
-    items: [
-      { name: "Figma (UI/UX)", level: 90 },
-      { name: "Adobe Photoshop", level: 85 },
-      { name: "Adobe Illustrator", level: 80 },
-      { name: "Blender (3D)", level: 65 },
-    ]
-  }
+const bentoItems = [
+  { label: 'Python', level: 80, category: 'Languages', size: 'lg' },
+  { label: 'C / C++', level: 70, category: 'Languages', size: 'sm' },
+  { label: 'Java', level: 70, category: 'Languages', size: 'sm' },
+  { label: 'TypeScript', level: 50, category: 'Languages', size: 'sm' },
+  { label: 'HTML', level: 90, category: 'Frontend', size: 'sm' },
+  { label: 'CSS', level: 90, category: 'Frontend', size: 'sm' },
+  { label: 'React', level: 80, category: 'Frontend', size: 'lg' },
+  { label: 'FastAPI', level: 70, category: 'Backend', size: 'sm' },
+  { label: 'MongoDB', level: 85, category: 'Backend', size: 'lg' },
+  { label: 'Firebase', level: 75, category: 'Backend', size: 'sm' },
+  { label: 'Python/C/C++', level: 80, category: 'Backend', size: 'sm' },
+  { label: 'Photoshop', level: 85, category: 'Creative', size: 'sm' },
+  { label: 'Illustrator', level: 80, category: 'Creative', size: 'sm' },
+  { label: 'Figma', level: 90, category: 'Creative', size: 'lg' },
+  { label: 'Blender', level: 65, category: 'Creative', size: 'sm' },
 ];
 
 const containerVariants = {
@@ -48,18 +28,20 @@ const containerVariants = {
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+  hidden: { opacity: 0, scale: 0.95 },
+  show: { opacity: 1, scale: 1, transition: { duration: 0.4 } }
 };
 
 const TechStack = ({ id = "techstack" }) => {
   return (
     <AnimatedLayout id={id}>
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-16 text-center">
-          <h2 className="text-4xl md:text-6xl font-black mb-6 text-white">Technical Arsenal</h2>
-          <p className="text-lg text-white/60 max-w-2xl mx-auto">
-            A comprehensive overview of my programming languages, frameworks, and creative software proficiencies.
+      <div className="max-w-7xl mx-auto px-4 md:px-0">
+        <div className="mb-16">
+          <h2 className="text-5xl md:text-7xl font-bold tracking-tight mb-4 text-white uppercase">
+            Technical Arsenal
+          </h2>
+          <p className="font-mono text-sm text-white/40">
+            Here's what I actually know how to use.
           </p>
         </div>
 
@@ -68,41 +50,38 @@ const TechStack = ({ id = "techstack" }) => {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8"
+          className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4"
         >
-          {skills.map((group, groupIndex) => (
+          {bentoItems.map((item, index) => (
             <motion.div 
-              key={group.category}
+              key={index}
               variants={itemVariants}
-              className="glass-panel p-8 rounded-3xl relative overflow-hidden group"
+              whileHover={{ scale: 1.02 }}
+              className={`relative bg-[#0a0a0a] border border-white/10 p-6 transition-all duration-300 hover:border-accent-blue rounded-lg overflow-hidden flex flex-col justify-between min-h-[160px] ${
+                item.size === 'lg' ? 'col-span-2' : 'col-span-1'
+              }`}
             >
-              {/* Background Glow Effect */}
-              <div className="absolute -inset-20 bg-gradient-to-r from-accent-blue/10 to-accent-purple/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-3xl pointer-events-none" />
+              <div>
+                <div className="font-mono text-[10px] uppercase tracking-widest text-white/30 mb-3">
+                  {item.category}
+                </div>
+                <div className="text-2xl md:text-3xl font-bold text-white">
+                  {item.label}
+                </div>
+              </div>
               
-              <h3 className="text-2xl font-bold mb-8 text-accent-blue relative z-10">
-                {group.category}
-              </h3>
-              
-              <div className="space-y-6 relative z-10">
-                {group.items.map((skill, index) => (
-                  <div key={skill.name}>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-medium text-white/90">{skill.name}</span>
-                      <span className="text-sm text-white/50">{skill.level}%</span>
-                    </div>
-                    <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
-                      <motion.div 
-                        initial={{ width: 0 }}
-                        whileInView={{ width: `${skill.level}%` }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1, delay: 0.2 + (index * 0.1), ease: "easeOut" }}
-                        className="h-full bg-gradient-to-r from-accent-blue to-accent-purple rounded-full relative"
-                      >
-                        <div className="absolute inset-0 bg-white/20 w-full animate-[shimmer_2s_infinite]" />
-                      </motion.div>
-                    </div>
-                  </div>
-                ))}
+              <div className="absolute bottom-4 right-4 text-4xl md:text-5xl font-bold text-white/10 pointer-events-none select-none">
+                {item.level}
+              </div>
+
+              <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/10">
+                <motion.div
+                  initial={{ width: 0 }}
+                  whileInView={{ width: `${item.level}%` }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+                  className="h-full bg-accent-blue"
+                />
               </div>
             </motion.div>
           ))}

@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import AnimatedLayout from "../components/AnimatedLayout";
 import { Mail, Send } from "lucide-react";
 
-// Inline SVG for LinkedIn
 const LinkedinIcon = ({ size = 24 }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
@@ -12,7 +11,6 @@ const LinkedinIcon = ({ size = 24 }) => (
   </svg>
 );
 
-// Inline SVG for GitHub
 const GithubIcon = ({ size = 24 }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path>
@@ -22,17 +20,13 @@ const GithubIcon = ({ size = 24 }) => (
 
 const Contact = ({ id = "contact" }) => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [status, setStatus] = useState("idle"); // idle, submitting, success, error
+  const [status, setStatus] = useState("idle");
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setStatus("submitting");
-    
-    // Simulate API call
     setTimeout(() => {
       if (formData.name && formData.email && formData.message) {
         setStatus("success");
@@ -47,142 +41,146 @@ const Contact = ({ id = "contact" }) => {
 
   return (
     <AnimatedLayout id={id}>
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16">
-        
-        {/* Left Column - Info & Socials */}
-        <div className="flex-1">
+      <div className="max-w-7xl mx-auto">
+
+        {/* Heading */}
+        <div className="mb-16">
+          <p className="font-mono text-xs tracking-[0.3em] uppercase mb-4" style={{ color: "var(--color-accent-blue)" }}>
+            [ GET IN TOUCH ]
+          </p>
+          <h2 className="text-5xl md:text-7xl font-bold tracking-tight text-white leading-none">
+            GOT SOMETHING<br />
+            <span style={{ color: "var(--color-accent-blue)" }}>IN MIND?</span>
+          </h2>
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-16 lg:gap-24">
+
+          {/* Left — contacts */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            className="flex-1"
+            initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.5 }}
           >
-            <h2 className="text-4xl md:text-6xl font-black mb-6">Let's Create<br/><span className="text-accent-blue">Together.</span></h2>
-            <p className="text-lg text-white/70 mb-12 max-w-md">
-              Whether you have a project in mind, need a designer, or just want to chat about tech, I'm always open to discussing new opportunities.
+            <p className="text-white/50 mb-12 max-w-sm leading-relaxed">
+              A project, a collab, or just want to say hi — I'm usually free. Just say it.
             </p>
-            
-            <div className="flex flex-col gap-6">
-              <a href="mailto:akash19cbe@gmail.com" className="flex items-center gap-4 text-white/80 hover:text-accent-blue transition-colors group w-fit">
-                <div className="p-4 rounded-full bg-white/5 border border-white/10 group-hover:border-accent-blue/50 transition-colors">
-                  <Mail size={24} />
-                </div>
-                <span className="text-lg font-medium">akash19cbe@gmail.com</span>
-              </a>
-              
-              <a href="https://www.linkedin.com/in/akash-k-19-cbe/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 text-white/80 hover:text-accent-blue transition-colors group w-fit">
-                <div className="p-4 rounded-full bg-white/5 border border-white/10 group-hover:border-accent-blue/50 transition-colors">
-                  <LinkedinIcon size={24} />
-                </div>
-                <span className="text-lg font-medium">LinkedIn Profile</span>
-              </a>
-              
-              <a href="https://github.com/akash-exe-19?tab=repositories" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 text-white/80 hover:text-accent-blue transition-colors group w-fit">
-                <div className="p-4 rounded-full bg-white/5 border border-white/10 group-hover:border-accent-blue/50 transition-colors">
-                  <GithubIcon size={24} />
-                </div>
-                <span className="text-lg font-medium">GitHub Repositories</span>
-              </a>
+
+            <div className="space-y-6">
+              {[
+                { href: "mailto:akash19cbe@gmail.com", icon: Mail, label: "akash19cbe@gmail.com" },
+                { href: "https://www.linkedin.com/in/akash-k-19-cbe/", icon: LinkedinIcon, label: "LinkedIn" },
+                { href: "https://github.com/akash-exe-19?tab=repositories", icon: GithubIcon, label: "GitHub" },
+              ].map(({ href, icon: Icon, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target={href.startsWith("http") ? "_blank" : undefined}
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-4 text-white/40 hover:text-white transition-colors group w-fit"
+                >
+                  <div className="p-3 border border-white/10 group-hover:border-white/40 transition-colors">
+                    <Icon size={20} />
+                  </div>
+                  <span className="font-mono text-sm tracking-wide">{label}</span>
+                </a>
+              ))}
+            </div>
+
+            {/* Availability indicator */}
+            <div className="mt-16 flex items-center gap-3">
+              <span
+                className="w-2 h-2 rounded-full animate-pulse"
+                style={{ backgroundColor: "var(--color-accent-blue)" }}
+              />
+              <span className="font-mono text-xs text-white/30 tracking-widest uppercase">Available for work</span>
             </div>
           </motion.div>
-        </div>
 
-        {/* Right Column - Form */}
-        <div className="flex-1">
-          <motion.form 
-            initial={{ opacity: 0, y: 30 }}
+          {/* Right — form */}
+          <motion.div
+            className="flex-1"
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            onSubmit={handleSubmit}
-            className="glass-panel p-8 md:p-12 rounded-3xl"
+            transition={{ duration: 0.5, delay: 0.15 }}
           >
-            <h3 className="text-2xl font-bold mb-8">Send a Message</h3>
-            
-            <div className="space-y-6">
-              <div className="relative group">
-                <input 
-                  type="text" 
-                  name="name" 
-                  id="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="w-full bg-transparent border-b-2 border-white/20 py-3 px-2 text-white focus:outline-none focus:border-accent-blue transition-colors peer"
-                  placeholder=" "
-                />
-                <label 
-                  htmlFor="name" 
-                  className="absolute left-2 top-3 text-white/50 transition-all peer-focus:-top-4 peer-focus:text-xs peer-focus:text-accent-blue peer-valid:-top-4 peer-valid:text-xs"
-                >
-                  Your Name
-                </label>
-              </div>
+            <form onSubmit={handleSubmit} className="border border-white/10 p-8 md:p-12">
+              <h3 className="font-mono text-xs uppercase tracking-[0.3em] text-white/30 mb-8">SEND A MESSAGE</h3>
 
-              <div className="relative group">
-                <input 
-                  type="email" 
-                  name="email" 
-                  id="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full bg-transparent border-b-2 border-white/20 py-3 px-2 text-white focus:outline-none focus:border-accent-blue transition-colors peer"
-                  placeholder=" "
-                />
-                <label 
-                  htmlFor="email" 
-                  className="absolute left-2 top-3 text-white/50 transition-all peer-focus:-top-4 peer-focus:text-xs peer-focus:text-accent-blue peer-valid:-top-4 peer-valid:text-xs"
-                >
-                  Email Address
-                </label>
-              </div>
+              <div className="space-y-8">
+                {[
+                  { name: "name", label: "Name", type: "text" },
+                  { name: "email", label: "Email", type: "email" },
+                ].map(({ name, label, type }) => (
+                  <div key={name} className="relative group">
+                    <input
+                      type={type}
+                      name={name}
+                      id={name}
+                      value={formData[name]}
+                      onChange={handleChange}
+                      required
+                      placeholder=" "
+                      className="w-full bg-transparent border-b border-white/15 py-3 px-0 text-white text-sm focus:outline-none focus:border-white transition-colors peer font-mono"
+                    />
+                    <label
+                      htmlFor={name}
+                      className="absolute left-0 top-3 text-white/30 text-xs font-mono uppercase tracking-widest transition-all peer-focus:-top-5 peer-focus:text-[10px] peer-valid:-top-5 peer-valid:text-[10px]"
+                      style={{}}
+                    >
+                      {label}
+                    </label>
+                  </div>
+                ))}
 
-              <div className="relative group pt-4">
-                <textarea 
-                  name="message" 
-                  id="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows="4"
-                  className="w-full bg-transparent border-b-2 border-white/20 py-3 px-2 text-white focus:outline-none focus:border-accent-blue transition-colors peer resize-none"
-                  placeholder=" "
-                ></textarea>
-                <label 
-                  htmlFor="message" 
-                  className="absolute left-2 top-7 text-white/50 transition-all peer-focus:top-0 peer-focus:text-xs peer-focus:text-accent-blue peer-valid:top-0 peer-valid:text-xs"
+                <div className="relative">
+                  <textarea
+                    name="message"
+                    id="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    rows="4"
+                    placeholder=" "
+                    className="w-full bg-transparent border-b border-white/15 py-3 px-0 text-white text-sm focus:outline-none focus:border-white transition-colors peer resize-none font-mono"
+                  />
+                  <label
+                    htmlFor="message"
+                    className="absolute left-0 top-3 text-white/30 text-xs font-mono uppercase tracking-widest transition-all peer-focus:-top-5 peer-focus:text-[10px] peer-valid:-top-5 peer-valid:text-[10px]"
+                  >
+                    Message
+                  </label>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={status === "submitting"}
+                  className="w-full py-4 border border-white/20 text-white font-mono text-xs tracking-[0.3em] uppercase hover:bg-white hover:text-black transition-all disabled:opacity-40 flex items-center justify-center gap-3"
+                  style={status !== "submitting" ? { borderColor: "var(--color-accent-blue)", color: "var(--color-accent-blue)" } : {}}
                 >
-                  Your Message
-                </label>
-              </div>
-              
-              <button 
-                type="submit"
-                disabled={status === "submitting"}
-                className="w-full py-4 rounded-xl bg-gradient-to-r from-accent-blue to-accent-purple text-white font-bold flex justify-center items-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50"
-              >
-                {status === "submitting" ? (
-                  <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }}>
-                    <Send size={20} />
-                  </motion.div>
-                ) : status === "success" ? (
-                  "Message Sent!"
-                ) : status === "error" ? (
-                  "Error Sending"
-                ) : (
-                  <>Send Message <Send size={20} /></>
+                  {status === "submitting" ? (
+                    <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }}>
+                      <Send size={16} />
+                    </motion.div>
+                  ) : status === "success" ? (
+                    "MESSAGE SENT."
+                  ) : status === "error" ? (
+                    "FILL ALL FIELDS."
+                  ) : (
+                    <><Send size={14} /> SEND MESSAGE</>
+                  )}
+                </button>
+
+                {status === "success" && (
+                  <p className="font-mono text-xs text-center" style={{ color: "var(--color-accent-blue)" }}>
+                    Got it. I'll get back to you soon.
+                  </p>
                 )}
-              </button>
-              
-              {status === "success" && (
-                <p className="text-green-400 text-sm text-center">Thanks for reaching out! I'll get back to you soon.</p>
-              )}
-              {status === "error" && (
-                <p className="text-red-400 text-sm text-center">Please fill out all fields.</p>
-              )}
-            </div>
-          </motion.form>
+              </div>
+            </form>
+          </motion.div>
         </div>
-
       </div>
     </AnimatedLayout>
   );

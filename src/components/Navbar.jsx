@@ -58,12 +58,11 @@ const Navbar = () => {
   };
 
   return (
-    <nav
-      className="fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 rounded-full glass-panel bg-primary-900/60 backdrop-blur-md border border-white/10 px-6 md:px-12 py-3 md:py-4 shadow-2xl hover:shadow-[0_0_40px_-10px_color-mix(in_srgb,var(--color-accent-blue)_40%,transparent)] w-auto md:w-[600px] flex justify-center"
-    >
-      <div className="flex justify-center items-center w-full">
-        {/* Desktop Nav */}
-        <div className="hidden md:flex justify-center w-full gap-10">
+    <>
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[rgba(0,0,0,0.95)] border-b border-white/10 py-4 px-6 md:px-12 flex justify-between items-center transition-all duration-300">
+        <div className="font-mono text-sm tracking-[0.3em] text-white/80">AKASH</div>
+        
+        <div className="hidden md:flex gap-8">
           {navLinks.map((link) => {
             const isActive = activeSection === link.path;
             return (
@@ -71,55 +70,55 @@ const Navbar = () => {
                 key={link.name}
                 href={`#${link.path}`}
                 onClick={(e) => handleLinkClick(e, link.path)}
-                className={`relative text-sm font-medium transition-colors cursor-pointer ${isActive ? 'text-white' : 'text-white/60 hover:text-white'}`}
+                className={`font-mono text-xs uppercase tracking-widest transition-colors cursor-pointer ${
+                  isActive 
+                  ? 'text-white border-b border-accent-blue pb-1' 
+                  : 'text-white/40 hover:text-white'
+                }`}
               >
                 {link.name}
-                {isActive && (
-                  <motion.div
-                    layoutId="navbar-indicator"
-                    className="absolute -bottom-2 left-0 right-0 h-0.5 bg-accent-blue rounded-full"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
               </a>
             );
           })}
         </div>
-
-        {/* Mobile Nav Toggle */}
+        
         <button
-          className="md:hidden text-white focus:outline-none cursor-pointer flex items-center justify-center"
-          onClick={() => setIsOpen(!isOpen)}
+          className="md:hidden text-white/80 hover:text-white focus:outline-none cursor-pointer flex items-center justify-center"
+          onClick={() => setIsOpen(true)}
         >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
+          <Menu size={24} />
         </button>
-      </div>
+      </nav>
 
-      {/* Mobile Nav Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            className="absolute top-[120%] left-1/2 -translate-x-1/2 w-[80vw] sm:w-[300px] bg-primary-900/90 backdrop-blur-lg border border-white/10 rounded-2xl md:hidden flex flex-col py-4 shadow-2xl overflow-hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[200] bg-black flex flex-col justify-center items-center gap-8"
           >
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={`#${link.path}`}
-              onClick={(e) => handleLinkClick(e, link.path)}
-              className={`px-6 py-3 text-sm font-medium cursor-pointer ${
-                activeSection === link.path ? "text-accent-blue bg-white/5" : "text-white/70"
-              }`}
+            <button
+              className="absolute top-6 right-6 text-white/60 hover:text-white"
+              onClick={() => setIsOpen(false)}
             >
-              {link.name}
-            </a>
-          ))}
-        </motion.div>
+              <X size={32} />
+            </button>
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={`#${link.path}`}
+                onClick={(e) => handleLinkClick(e, link.path)}
+                className="text-4xl font-bold text-white/60 hover:text-white transition-colors"
+              >
+                {link.name}
+              </a>
+            ))}
+          </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+    </>
   );
 };
 
