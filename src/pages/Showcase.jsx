@@ -18,6 +18,10 @@ const Showcase = ({ id = "showcase" }) => {
     ? graphicsData 
     : graphicsData.filter(g => g.category === selectedCategory);
 
+  // Safe index calculation to prevent out-of-bounds crash when switching to a category with fewer items
+  const safeIndex = currentIndex < filteredGraphics.length ? currentIndex : 0;
+  const currentItem = filteredGraphics[safeIndex];
+
   // Reset carousel index when switching categories
   useEffect(() => {
     setDirection(1);
@@ -26,12 +30,18 @@ const Showcase = ({ id = "showcase" }) => {
 
   const scrollLeft = () => {
     setDirection(-1);
-    setCurrentIndex((prev) => (prev === 0 ? filteredGraphics.length - 1 : prev - 1));
+    setCurrentIndex((prev) => {
+      const validPrev = prev < filteredGraphics.length ? prev : 0;
+      return validPrev === 0 ? filteredGraphics.length - 1 : validPrev - 1;
+    });
   };
 
   const scrollRight = () => {
     setDirection(1);
-    setCurrentIndex((prev) => (prev === filteredGraphics.length - 1 ? 0 : prev + 1));
+    setCurrentIndex((prev) => {
+      const validPrev = prev < filteredGraphics.length ? prev : 0;
+      return validPrev === filteredGraphics.length - 1 ? 0 : validPrev + 1;
+    });
   };
   
   // Auto-scroll logic (every 3 seconds)
@@ -40,7 +50,10 @@ const Showcase = ({ id = "showcase" }) => {
     
     const intervalId = setInterval(() => {
       setDirection(1);
-      setCurrentIndex((prev) => (prev === filteredGraphics.length - 1 ? 0 : prev + 1));
+      setCurrentIndex((prev) => {
+        const validPrev = prev < filteredGraphics.length ? prev : 0;
+        return validPrev === filteredGraphics.length - 1 ? 0 : validPrev + 1;
+      });
     }, 3000);
 
     return () => clearInterval(intervalId);
@@ -110,14 +123,14 @@ const Showcase = ({ id = "showcase" }) => {
             )}
 
             {/* Single Active Item Container */}
-            <div 
-              className="w-full max-w-5xl aspect-video md:aspect-[21/9] relative cursor-pointer flex justify-center items-center overflow-hidden rounded-2xl" 
-              onClick={() => setIsLightboxOpen(true)}
-            >
-              <AnimatePresence initial={false} custom={direction}>
-                {filteredGraphics.length > 0 && (
+            {filteredGraphics.length > 0 && currentItem ? (
+              <div 
+                className="w-full max-w-5xl aspect-video md:aspect-[21/9] relative cursor-pointer flex justify-center items-center overflow-hidden rounded-2xl" 
+                onClick={() => setIsLightboxOpen(true)}
+              >
+                <AnimatePresence initial={false} custom={direction}>
                   <motion.div
-                    key={currentIndex}
+                    key={currentItem.id}
                     custom={direction}
                     variants={slideVariants}
                     initial="enter"
@@ -129,29 +142,33 @@ const Showcase = ({ id = "showcase" }) => {
                     {/* Dynamic Glow Behind Image */}
                     <div 
                       className="absolute inset-0 rounded-full blur-[100px] opacity-30 transition-colors duration-700 pointer-events-none scale-75"
-                      style={{ backgroundColor: filteredGraphics[currentIndex].themeColor }}
+                      style={{ backgroundColor: currentItem.themeColor }}
                     />
                     <img 
-                      src={filteredGraphics[currentIndex].image} 
-                      alt={filteredGraphics[currentIndex].title} 
+                      src={currentItem.image} 
+                      alt={currentItem.title} 
                       className="max-w-full max-h-full object-contain drop-shadow-2xl transition-transform duration-700 hover:scale-105 z-10 relative"
                       loading="lazy"
                     />
                     <div className="absolute bottom-0 inset-x-0 p-6 md:p-8 flex justify-between items-end z-20 pointer-events-none">
                       <div>
-                        <h3 className="text-2xl md:text-3xl font-bold mb-2 text-white drop-shadow-lg">{filteredGraphics[currentIndex].title}</h3>
+                        <h3 className="text-2xl md:text-3xl font-bold mb-2 text-white drop-shadow-lg">{currentItem.title}</h3>
                         <span className="text-accent-blue text-sm md:text-md font-medium px-3 py-1 bg-primary-900/50 backdrop-blur-md rounded-full border border-white/10 shadow-lg">
-                          {filteredGraphics[currentIndex].category}
+                          {currentItem.category}
                         </span>
                       </div>
                       <span className="text-white/40 text-sm font-medium tracking-widest uppercase hidden md:block">
-                        {currentIndex + 1} / {filteredGraphics.length}
+                        {safeIndex + 1} / {filteredGraphics.length}
                       </span>
                     </div>
                   </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+                </AnimatePresence>
+              </div>
+            ) : (
+              <div className="w-full max-w-5xl aspect-video md:aspect-[21/9] flex justify-center items-center glass-panel rounded-2xl">
+                <p className="text-white/60">No designs found in this category.</p>
+              </div>
+            )}
           </div>
         </section>
 
@@ -182,7 +199,7 @@ const Showcase = ({ id = "showcase" }) => {
 
       {/* Lightbox Modal */}
       <AnimatePresence>
-        {isLightboxOpen && filteredGraphics.length > 0 && (
+        {isLightboxOpen && currentItem && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -202,8 +219,8 @@ const Showcase = ({ id = "showcase" }) => {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.8, y: 20 }}
               transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
-              src={filteredGraphics[currentIndex].image}
-              alt={filteredGraphics[currentIndex].title}
+              src={currentItem.image}
+              alt={currentItem.title}
               className="max-w-full max-h-full object-contain drop-shadow-2xl cursor-default rounded-lg"
               onClick={(e) => e.stopPropagation()} // Prevent click from closing
             />
