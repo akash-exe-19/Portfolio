@@ -5,28 +5,27 @@ const skills = [
   {
     category: "Languages & Core",
     items: [
-      { name: "JavaScript / ES6+", level: 90 },
-      { name: "TypeScript", level: 85 },
       { name: "Python", level: 80 },
-      { name: "C++ / Java", level: 75 },
+      { name: "C/C++", level: 70 },
+      { name: "Java", level: 70 },
+      { name: "TypeScript", level: 50 },
     ]
   },
   {
     category: "Frontend & UI",
     items: [
-      { name: "React & Next.js", level: 95 },
-      { name: "Tailwind CSS", level: 95 },
-      { name: "Framer Motion", level: 85 },
-      { name: "Three.js (WebGL)", level: 70 },
+      { name: "HTML", level: 90 },
+      { name: "CSS", level: 90 },
+      { name: "React", level: 80 },
     ]
   },
   {
     category: "Backend & Systems",
     items: [
-      { name: "Node.js & Express", level: 85 },
-      { name: "FastAPI", level: 75 },
-      { name: "MongoDB & PostgreSQL", level: 80 },
-      { name: "RESTful APIs", level: 90 },
+      { name: "FastAPI", level: 70 },
+      { name: "Python/C/C++", level: 80 },
+      { name: "Firebase", level: 75 },
+      { name: "MongoDB", level: 85 },
     ]
   },
   {
