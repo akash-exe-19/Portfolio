@@ -6,92 +6,81 @@ import poster3 from '../assets/Posters/porsche.png';
 import poster4 from '../assets/Posters/Bruno4.png';
 import poster5 from '../assets/Posters/France2.png';
 import poster6 from '../assets/Posters/Haaland.png';
+import poster7 from '../assets/Posters/Seismosolve.jpeg';
+import model1 from '../assets/3D/3D Sword Model.jpeg';
 
 export const graphicsData = [
   {
     id: 1,
-    title: "Neon Cyber Logo",
-    category: "Logos",
-    image: "https://picsum.photos/seed/logo1/800/600",
-    themeColor: "#00d2ff" // Accent blue
-  },
-  {
-    id: 2,
     title: "Itadori Yuji Banner",
     category: "Banners",
     image: banner1,
     themeColor: "#b22222" // Firebrick red
   },
   {
-    id: 3,
+    id: 2,
     title: "Naruto Banner",
     category: "Banners",
     image: banner2,
     themeColor: "#ff8c00" // Dark orange
   },
   {
-    id: 4,
-    title: "Abstract 3D Shape",
-    category: "3D Art",
-    image: "https://picsum.photos/seed/3d1/800/600",
-    themeColor: "#7a2cb3" // Accent purple
-  },
-  {
-    id: 5,
+    id: 3,
     title: "De Tomaso Poster",
     category: "Posters",
     image: poster1,
     themeColor: "#8b0000" // Dark red
   },
   {
-    id: 6,
+    id: 4,
     title: "Gojo Satoru Poster",
     category: "Posters",
     image: poster2,
     themeColor: "#4b0082" // Indigo
   },
   {
-    id: 7,
+    id: 5,
     title: "Porsche Poster",
     category: "Posters",
     image: poster3,
     themeColor: "#708090" // Slate gray
   },
   {
-    id: 8,
+    id: 6,
     title: "Bruno Fernandes Poster",
     category: "Posters",
     image: poster4,
     themeColor: "#da291c" // MUFC Red
   },
   {
-    id: 9,
+    id: 7,
     title: "France Team Poster",
     category: "Posters",
     image: poster5,
     themeColor: "#002395" // French Blue
   },
   {
-    id: 10,
+    id: 8,
     title: "Erling Haaland Poster",
     category: "Posters",
     image: poster6,
     themeColor: "#6cabdd" // Man City Blue
   },
   {
-    id: 11,
-    title: "Startup Brand Identity",
-    category: "Logos",
-    image: "https://picsum.photos/seed/logo2/800/600",
-    themeColor: "#00fa9a" // Medium spring green
+    id: 9,
+    title: "Seismosolve Poster",
+    category: "Posters",
+    image: poster7,
+    themeColor: "#ff4500" // Orange red
   },
   {
-    id: 12,
-    title: "Sci-Fi Render",
-    category: "3D Art",
-    image: "https://picsum.photos/seed/3d2/800/600",
-    themeColor: "#ff007f" // Accent neon
+    id: 10,
+    title: "3D Sword Model",
+    category: "3D Models",
+    image: model1,
+    themeColor: "#00d2ff",
+    blenderFile: "#"
   }
 ];
 
-export const categories = ["All", "Logos", "Banners", "Posters", "3D Art"];
+export const categories = ["All", "Banners", "Posters", "3D Models"];

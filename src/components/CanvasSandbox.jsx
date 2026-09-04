@@ -270,11 +270,23 @@ const CanvasSandbox = () => {
     }
   };
 
-  const handleWheel = (e) => {
-    e.preventDefault();
-    const delta = e.deltaY > 0 ? -0.1 : 0.1;
-    setZoom((z) => Math.min(3.0, Math.max(0.3, parseFloat((z + delta).toFixed(2)))));
-  };
+  // Native non-passive wheel listener to reliably prevent page scroll on Ctrl + Scroll
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const handleNativeWheel = (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        e.stopPropagation();
+        const delta = e.deltaY > 0 ? -0.1 : 0.1;
+        setZoom((z) => Math.min(3.0, Math.max(0.3, parseFloat((z + delta).toFixed(2)))));
+      }
+    };
+
+    canvas.addEventListener("wheel", handleNativeWheel, { passive: false });
+    return () => canvas.removeEventListener("wheel", handleNativeWheel);
+  }, []);
 
   const handleCanvasClick = (e) => {
     const canvas = canvasRef.current;
@@ -479,7 +491,6 @@ const CanvasSandbox = () => {
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
-        onWheel={handleWheel}
       >
         <canvas ref={canvasRef} className="w-full h-full" />
 
@@ -487,12 +498,12 @@ const CanvasSandbox = () => {
         <div className="absolute bottom-3 left-4 font-mono text-[10px] text-white/40 tracking-widest pointer-events-none">
           {shapeKey === "custom" ? (
             editTool === "auto"
-              ? "CLICK CANVAS TO PLACE & AUTO-CONNECT VERTICES · DRAG TO ROTATE · SCROLL TO ZOOM"
+              ? "CLICK CANVAS TO PLACE & AUTO-CONNECT VERTICES · DRAG TO ROTATE · CTRL+SCROLL TO ZOOM"
               : selectedVertex !== null
-              ? "CLICK A SECOND VERTEX TO DRAW EDGE · DRAG TO ROTATE · SCROLL TO ZOOM"
-              : "CLICK A VERTEX TO SELECT FOR MANUAL EDGE · DRAG TO ROTATE · SCROLL TO ZOOM"
+              ? "CLICK A SECOND VERTEX TO DRAW EDGE · DRAG TO ROTATE · CTRL+SCROLL TO ZOOM"
+              : "CLICK A VERTEX TO SELECT FOR MANUAL EDGE · DRAG TO ROTATE · CTRL+SCROLL TO ZOOM"
           ) : (
-            "← DRAG TO ROTATE · SCROLL TO ZOOM →"
+            "← DRAG TO ROTATE · CTRL+SCROLL TO ZOOM →"
           )}
         </div>
 

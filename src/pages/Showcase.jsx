@@ -2,14 +2,16 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedLayout from "../components/AnimatedLayout";
 import ProjectCard from "../components/ProjectCard";
+import ProjectModal from "../components/ProjectModal";
 import CanvasSandbox from "../components/CanvasSandbox";
 import { graphicsData, categories } from "../data/graphicsData";
 import { projectData } from "../data/projectData";
-import { ChevronLeft, ChevronRight, X, Maximize2, Layers } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, Maximize2, Layers, Download } from "lucide-react";
 
 const Showcase = ({ id = "showcase" }) => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [activeItem, setActiveItem] = useState(null); // For Lightbox modal
+  const [selectedProject, setSelectedProject] = useState(null); // For Project detail modal
   const scrollContainerRef = useRef(null);
 
   const filteredGraphics = selectedCategory === "All" 
@@ -149,15 +151,28 @@ const Showcase = ({ id = "showcase" }) => {
 
                   {/* Bottom Info Bar */}
                   <div className="p-4 bg-black border-t border-white/10 z-10 flex justify-between items-end">
-                    <div>
+                    <div className="flex-1 min-w-0 pr-2">
                       <h3 className="font-bold text-base text-white group-hover:text-accent-blue transition-colors line-clamp-1">
                         {item.title}
                       </h3>
                       <p className="font-mono text-[10px] text-white/40 tracking-wider mt-1 uppercase">
                         COLOR: {item.themeColor}
                       </p>
+                      {item.category === "3D Models" && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            alert("Blender file download coming soon!");
+                          }}
+                          className="mt-2 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider border border-white/20 px-2 py-1 text-white/80 hover:border-accent-blue hover:text-accent-blue transition-all cursor-pointer bg-white/5"
+                          title="Download .BLEND File"
+                        >
+                          <Download size={12} />
+                          <span>[ DOWNLOAD .BLEND ]</span>
+                        </button>
+                      )}
                     </div>
-                    <span className="font-mono text-[10px] text-white/30 uppercase tracking-widest">
+                    <span className="font-mono text-[10px] text-white/30 uppercase tracking-widest shrink-0">
                       [ {index + 1}/{filteredGraphics.length} ]
                     </span>
                   </div>
@@ -205,12 +220,25 @@ const Showcase = ({ id = "showcase" }) => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 key={project.id}
               >
-                <ProjectCard project={project} />
+                <ProjectCard
+                  project={project}
+                  onSelectProject={(p) => setSelectedProject(p)}
+                />
               </motion.div>
             ))}
           </div>
         </section>
       </div>
+
+      {/* ================================================================= */}
+      {/* FLOATING PROJECT DETAIL MODAL                                     */}
+      {/* ================================================================= */}
+      {selectedProject && (
+        <ProjectModal
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
+      )}
 
       {/* ================================================================= */}
       {/* LIGHTBOX MODAL FOR HIGH-RES INSPECTION                           */}
@@ -259,9 +287,21 @@ const Showcase = ({ id = "showcase" }) => {
 
             {/* Modal Footer Info Bar */}
             <div className="w-full max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center border-t border-white/10 pt-4 gap-4 z-10 font-mono text-xs">
-              <div className="flex items-center gap-4 text-white/60">
+              <div className="flex items-center gap-4 text-white/60 flex-wrap">
                 <span>CATEGORY: <strong className="text-white">{activeItem.category}</strong></span>
                 <span>COLOR: <strong style={{ color: activeItem.themeColor }}>{activeItem.themeColor}</strong></span>
+                {activeItem.category === "3D Models" && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      alert("Blender file download coming soon!");
+                    }}
+                    className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest border border-accent-blue px-3.5 py-1.5 text-accent-blue hover:bg-accent-blue hover:text-black transition-all cursor-pointer"
+                  >
+                    <Download size={14} />
+                    <span>[ DOWNLOAD .BLEND FILE ]</span>
+                  </button>
+                )}
               </div>
               <span className="text-white/30 uppercase tracking-widest">PRESS ESC OR CLICK ANYWHERE TO CLOSE</span>
             </div>

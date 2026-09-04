@@ -1,12 +1,13 @@
 import { motion } from "framer-motion";
 import { ExternalLink, Terminal } from "lucide-react";
 
-const ProjectCard = ({ project }) => {
+const ProjectCard = ({ project, onSelectProject }) => {
   return (
     <motion.div
       whileHover={{ y: -6, scale: 1.01 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
-      className="group relative border border-white/15 bg-black flex flex-col h-full overflow-hidden"
+      className="group relative border border-white/15 bg-black flex flex-col h-full overflow-hidden cursor-pointer"
+      onClick={() => onSelectProject && onSelectProject(project)}
     >
       {/* Terminal Header Bar */}
       <div className="bg-white/5 border-b border-white/10 px-4 py-2.5 flex items-center justify-between shrink-0">
@@ -18,9 +19,13 @@ const ProjectCard = ({ project }) => {
             proj_{String(project.id).padStart(2, '0')}.manifest
           </span>
         </div>
-        <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-emerald-400">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span>DEPLOYED</span>
+        <div className={`flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest ${
+          project.inDevelopment ? "text-amber-400" : "text-emerald-400"
+        }`}>
+          <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${
+            project.inDevelopment ? "bg-amber-400" : "bg-emerald-400"
+          }`} />
+          <span>{project.status || (project.inDevelopment ? "IN DEVELOPMENT" : "DEPLOYED")}</span>
         </div>
       </div>
 
@@ -64,15 +69,16 @@ const ProjectCard = ({ project }) => {
           </div>
           
           {/* Action Link */}
-          <a
-            href={project.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 font-mono text-xs tracking-widest uppercase border border-white/20 px-4 py-2.5 text-white hover:border-accent-blue hover:text-accent-blue transition-all w-full justify-center"
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (onSelectProject) onSelectProject(project);
+            }}
+            className="inline-flex items-center gap-2 font-mono text-xs tracking-widest uppercase border border-white/20 px-4 py-2.5 text-white hover:border-accent-blue hover:text-accent-blue transition-all w-full justify-center cursor-pointer bg-white/5"
           >
-            <span>[ VIEW PROJECT ]</span>
+            <span>[ VIEW DETAILS & REPO ]</span>
             <ExternalLink size={14} />
-          </a>
+          </button>
         </div>
       </div>
     </motion.div>
